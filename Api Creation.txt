@@ -1,0 +1,48 @@
+API CREATE STEPS:
+
+Step 1: Ng new Api //Project Create
+
+step 2: ng g c Data //Component Genrate
+
+step 3: ng g s APi_Service //Service Create
+-------------------------------------------------------------------------------------
+1)	open app.module.ts file
+
+			import { HttpClientModule } from '@angular/common/http';
+
+		imports{
+			HttpClientModule
+		}
+------------------------------------------------------------------------------------
+2) 	open api.service.ts File
+
+ 	import{ HttpClient} from '@angular/common/http';
+
+ 	 export class APIService {
+	  constructor(private http:HttpClient) { }
+	  Data(){
+	    return this.http.get('Fake API Link');
+  }
+ ------------------------------------------------------------------------------------
+
+3) 	open data.component.ts
+
+ 	 export class GETDATAComponent {
+
+	  constructor(private ser:APIService){}
+
+	  	dummy:any;
+		ngOnInit():void{
+	  		this.ser.Data().subscribe((res)=>{
+	    		this.dummy=res;
+	  		})
+		}
+  	}
+ ------------------------------------------------------------------------------------
+
+ open data.component.html
+
+ 		{{dummy|json}}  //print Pipe Data
+
+ ------------------------------------------------------------------------------------
+
