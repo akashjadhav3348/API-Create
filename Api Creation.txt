@@ -22,27 +22,75 @@ step 3: ng g s APi_Service //Service Create
 	  constructor(private http:HttpClient) { }
 	  Data(){
 	    return this.http.get('Fake API Link');
-  }
+  	 }
+	   userDataSendBackend(data:any){
+	    return this.http.post('http://localhost:8000/insert',data);
+	  }
+
+	  deletef(idu:any){
+	    let obj={id:idu};
+	    return this.http.post('http://localhost:8000/delete',obj);
+	  }
+	  editUserDate(obj:any,id:any){
+	     obj.id=id;
+	     return this.http.post('http://localhost:8000/edit',obj);
+	  }
+	  singleUserData(idu:any){
+	    let obj={id:idu};
+	    return this.http.post('http://localhost:8000/onedata',obj);
+	  }
+	}
  ------------------------------------------------------------------------------------
 
 3) 	open data.component.ts
 
- 	 export class GETDATAComponent {
+ 	 export class DataComponent {
+	  constructor(private ser:ApiService, private fb:FormBuilder){}
+	  DATA:any;
+	  formData: any;
+	  ngOnInit():void{
+	    this.ser.data().subscribe((res)=>{
+	      this.DATA=res;
+	    })
+	    this.formData=this.fb.group({
+	      username:[''],
+	      password:['']
+	    })
+	  }
 
-	  constructor(private ser:APIService){}
+	  submitData(){
+	    this.ser.userDataSendBackend(this.formData.value).subscribe((res: any)=>{
+	    console.log(res);    
+	    })
+	    console.log(this.formData.value);
 
-	  	dummy:any;
-		ngOnInit():void{
-	  		this.ser.Data().subscribe((res)=>{
-	    		this.dummy=res;
-	  		})
-		}
-  	}
+	  }
+	  del(id:any){
+	    this.ser.deletef(id).subscribe((res)=>{
+	      console.log(res);
+
+	    })
+	  }
+
+	  editdata(id:any){
+	    this.ser.editUserDate(this.formData.value,id).subscribe((res)=>{
+	      console.log(res);
+
+	    })
+	  }
+	  singleuserdata:any;
+	  onedata(id:any){
+	    this.ser.singleUserData(id).subscribe((res)=>{
+	      this.singleuserdata=res;
+	    })
+	  }
+	}
+
  ------------------------------------------------------------------------------------
 
  open data.component.html
 
- 		{{dummy|json}}  //print Pipe Data
+ 		{{DATA|json}}  //print Pipe Data
 
  ------------------------------------------------------------------------------------
 
